@@ -1,0 +1,114 @@
+"use client";
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { validateRegisterForm } from "@/helpers/validate";
+import Link from 'next/link';
+
+export const RegisterView = () => {
+    return (
+        <div className="flex items-center justify-center min-h-screen bg-gray-100">
+            <div className="w-full max-w-md bg-white shadow-md rounded-lg p-8">
+                <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">
+                    Register to MyStore!
+                </h1>
+                <Formik
+                    initialValues={{ email: '', password: '', name: '', phone: '', address: '' }}
+                    validate={validateRegisterForm}
+                    onSubmit={(values) => {
+                        console.log("submit exitoso");
+                    }}
+                >
+                    {({ isSubmitting }) => (
+                        <Form className="space-y-6">
+                            <div>
+                                <Field
+                                    type="text"
+                                    name="name"
+                                    placeholder="Nombre"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
+                                />
+                                <ErrorMessage
+                                    name="name"
+                                    component="div"
+                                    className="text-sm text-red-500 mt-1"
+                                />
+                            </div>
+                            <div>
+                                <Field
+                                    type="email"
+                                    name="email"
+                                    placeholder="email@email.com"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
+                                />
+                                <ErrorMessage
+                                    name="email"
+                                    component="div"
+                                    className="text-sm text-red-500 mt-1"
+                                />
+                            </div>
+                            <div>
+                                <Field
+                                    type="text"
+                                    name="address"
+                                    placeholder="Dirección"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
+                                />
+                                <ErrorMessage
+                                    name="address"
+                                    component="div"
+                                    className="text-sm text-red-500 mt-1"
+                                />
+                            </div>
+                            <div>
+                                <Field
+                                    type="text"
+                                    name="phone"
+                                    placeholder="381.."
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
+                                />
+                                <ErrorMessage
+                                    name="phone"
+                                    component="div"
+                                    className="text-sm text-red-500 mt-1"
+                                />
+                            </div>
+                            <div>
+                                <Field
+                                    type="password"
+                                    name="password"
+                                    placeholder="****"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
+                                />
+                                <ErrorMessage
+                                    name="password"
+                                    component="div"
+                                    className="text-sm text-red-500 mt-1"
+                                />
+                            </div>
+                            <div className="flex justify-center space-x-4">
+                                <button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className="btn-primary px-6 py-2 bg-gray-800 text-white font-medium rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                                >
+                                    {isSubmitting ? "Submitting..." : "Submit"}
+                                </button>
+                                
+                            </div>
+                            
+                        </Form>
+                    )}
+                </Formik>
+                <div className="mt-6 text-center">
+                    <p className="text-gray-600">
+                        ¿Ya tenes una cuenta creada?{" "}
+                        <Link href="/Login" className="text-blue-600 hover:underline">
+                            Logueate
+                        </Link>
+                    </p>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default RegisterView;

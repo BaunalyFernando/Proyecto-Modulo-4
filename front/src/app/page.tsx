@@ -1,10 +1,16 @@
 import CardList from "@/components/card/cardList";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css"; // Importar estilos
+config.autoAddCss = false;
+
 
 export default function Home() {
   return (
     <>
-       <h1>Home View</h1>
-       <CardList />
+      <div className="bg-white">
+        <CardList />
+      </div>
+       
     </>
   );
 }
