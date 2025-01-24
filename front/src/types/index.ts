@@ -38,3 +38,16 @@ export interface IRegisterPropsErrors {
   address: string;
   password: string
 }
+
+
+export interface IUserSession {
+    token: string;
+    user: {
+        id: number;
+        name: string;
+        email: string;
+        phone: string;
+        address: string;
+        orders: [];
+    };
+}

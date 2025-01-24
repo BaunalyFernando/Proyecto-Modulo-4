@@ -1,20 +1,34 @@
 "use client";
+import { register } from '@/helpers/auth.helper';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { validateRegisterForm } from "@/helpers/validate";
 import Link from 'next/link';
 
 export const RegisterView = () => {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
+    
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="w-full max-w-md bg-white shadow-md rounded-lg p-8">
+            <div className="w-40 max-w-md bg-white shadow-md rounded-lg p-8">
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">
                     Register to MyStore!
                 </h1>
                 <Formik
                     initialValues={{ email: '', password: '', name: '', phone: '', address: '' }}
-                    validate={validateRegisterForm}
-                    onSubmit={(values) => {
-                        console.log("submit exitoso");
+                    onSubmit={async (values, { setSubmitting, resetForm }) => {
+                        console.log("Botón presionado. Valores del formulario:", values);
+
+                        try {
+                            console.log(values);
+                            await register(values);
+                            alert("Se creo el usuario correctamente");
+                            resetForm(); 
+                        } catch (error) {
+                            console.error("Error al enviar el formulario:", error);
+                            alert("Hubo un error.");
+                        }
+
+                        setSubmitting(false);
                     }}
                 >
                     {({ isSubmitting }) => (
@@ -92,17 +106,15 @@ export const RegisterView = () => {
                                 >
                                     {isSubmitting ? "Submitting..." : "Submit"}
                                 </button>
-                                
                             </div>
-                            
                         </Form>
                     )}
                 </Formik>
                 <div className="mt-6 text-center">
                     <p className="text-gray-600">
-                        ¿Ya tenes una cuenta creada?{" "}
+                        ¿Ya tienes una cuenta creada?{" "}
                         <Link href="/Login" className="text-blue-600 hover:underline">
-                            Logueate
+                            Loguéate
                         </Link>
                     </p>
                 </div>

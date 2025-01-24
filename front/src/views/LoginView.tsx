@@ -3,19 +3,52 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import Link from 'next/link';
 import { validateLoginForm } from "@/helpers/validate";
+import { login } from "@/helpers/auth.helper";
+import { useAuth } from "@/context/Auth.Context";
+import { useRouter } from "next/navigation";
 
 export const LoginView = () => {
+    const {userData, setUserData} = useAuth();
+    const router = useRouter();
+
+    interface LoginFormValues {
+        email: string;
+        password: string;
+    } 
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="w-full max-w-md bg-white shadow-md rounded-lg p-8">
+            <div className="w-65 max-w-md bg-white shadow-md rounded-lg p-8">
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">
                     Login to MyStore!
                 </h1>
-                <Formik
-                    initialValues={{ email: '', password: '' }}
-                    validate={validateLoginForm}
-                    onSubmit={(values) => {
-                        console.log("submit exitoso");
+                <Formik<LoginFormValues>
+                    initialValues={{ email: "", password: "" }}
+                    validate={(values) => {
+                        const errors: Partial<LoginFormValues> = {};
+                        if (!values.email) {
+                            errors.email = "El email es obligatorio.";
+                        }
+                        if (!values.password) {
+                            errors.password = "La contraseña es obligatoria.";
+                        }
+                        return errors;
+                    }}
+                    onSubmit={async (values, { setSubmitting }) => {
+                        console.log("Enviando datos:", values);
+                        try {
+                            const data = await login(values);
+                            setUserData({token: data.token, user: data.user});
+                            
+                            alert("Inicio de sesión exitoso");
+                            router.push("/");
+                            
+                        } catch (error) {
+                            console.error("Error en el envío:", error);
+                            alert("Error al iniciar sesión");
+                        } finally {
+                            setSubmitting(false);
+                        }
                     }}
                 >
                     {({ isSubmitting }) => (
@@ -54,14 +87,13 @@ export const LoginView = () => {
                                 >
                                     {isSubmitting ? "Submitting..." : "Submit"}
                                 </button>
-                                
                             </div>
                         </Form>
                     )}
                 </Formik>
                 <div className="mt-6 text-center">
                     <p className="text-gray-600">
-                        ¿No tienes todavía una cuenta?{" "}
+                        ¿No tienes una cuenta?{" "}
                         <Link href="/Register" className="text-blue-600 hover:underline">
                             Regístrate
                         </Link>

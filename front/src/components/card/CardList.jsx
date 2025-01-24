@@ -1,19 +1,26 @@
-import React from 'react'
+import React from 'react';
 import Card from '@/components/card';
-import productsToPreLoad from '@/helpers/productsToPreLoad';
+import { getProductsDB } from '../../helpers/products.helper';
 
-export const CardList = () => {
+export const CardList = async () => {
+  const products = await getProductsDB();
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {
-        productsToPreLoad && productsToPreLoad.map((product) => {
-          return (
-            <Card key={product.id} {...product} /> 
-          );
-        })
-      }
+      {products.map((product) => (
+        <Card
+          key={product.id}
+          id={product.id}
+          description={product.description}
+          name={product.name}
+          price={product.price}
+          stock={product.stock}
+          image={product.image}
+          categoryId={product.categoryId}
+        />
+      ))}
     </div>
   );
-}
+};
 
 export default CardList;
