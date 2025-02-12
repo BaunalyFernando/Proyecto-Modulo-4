@@ -19,6 +19,25 @@ export const getProductsDBById = async (id: string) => {
     }
 };
 
+export const getProductsDBByCategoryId = async (categoryId: string) => {
+    try {
+        const response = await fetch(`${API_URL}/products`, {
+            next: { revalidate: 1200 },
+        });
+        const products: IProducts[] = await response.json();
+       
+        let productFiltered: IProducts[] = products.filter((product) => product.categoryId.toString() === categoryId);
+        if (!productFiltered) {
+            throw new Error(`Product with id ${categoryId} not found`);
+        }
+        return productFiltered;
+    } catch (error: any) {
+        console.error("Error in getProductsDBById:", error);
+        throw new Error(`Failed to fetch product by id: ${error.message || error}`);
+    }
+};
+
+
 export const getProductsDB = async () => {
     try {
         const response = await fetch(`${API_URL}/products`, {

@@ -1,10 +1,14 @@
 "use client";
-import { IProducts } from "@/types";
+import { useAuth } from "@/context/Auth.Context";
+import { addOrder } from "@/helpers/cart.helper";
+import { IOrder, IProducts } from "@/types";
 import { useRouter } from "next/navigation";
 
-export const CartView = () => {
+export const CartView =  () => {
 
   const router = useRouter();
+
+  const {userData, setUserData} = useAuth();
 
   const products: IProducts[] = localStorage.getItem("cart")
     ? JSON.parse(localStorage.getItem("cart") || "[]")
@@ -12,11 +16,21 @@ export const CartView = () => {
 
   const total = products.reduce((acc, product) => acc + product.price, 0);
 
-  const handleEndTransition = () => {
-      localStorage.removeItem("cart");
-      router.push("/");
-      alert("Your opperation has been completed successfully");
-    };
+  const handleEndTransition = async() => {
+    try {
+        const productsToPost = products.map((product) => product.id);
+        console.log("Token:", userData?.token);
+        const orders = await addOrder(userData?.user.id, productsToPost, userData?.token);
+        console.log("Respuesta del servidor:", orders);
+      if(orders){
+        localStorage.removeItem("cart");
+        router.push("/");
+        alert("Your opperation has been completed successfully");
+      }
+    } catch (error) {
+        
+    }
+};
 
   return (
     <div className="bg-white min-h-screen p-8">

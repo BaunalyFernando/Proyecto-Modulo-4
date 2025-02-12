@@ -17,25 +17,23 @@ export interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-    const [userData, setUserData] = useState<IUserSession | null>(null);
+    const [userData, setUserData] = useState<IUserSession | null>(() => {
+        // Inicializa el estado con los datos del localStorage si existen
+        const storedData = localStorage.getItem("userSession");
+        return storedData ? JSON.parse(storedData) : null;
+    });
 
     useEffect(() => {
-        if(userData){
-            localStorage.setItem("userSession", JSON.stringify({token: userData.token, user: userData.user}));
+        if (userData) {
+            localStorage.setItem("userSession", JSON.stringify({ token: userData.token, user: userData.user }));
         }
     }, [userData]);
 
-    useEffect(() => {
-        const userData = JSON.parse(localStorage.getItem("userSession")!);
-        setUserData(userData);
-    }, []);
-
     return (
-        <AuthContext.Provider value={{userData, setUserData}}>
+        <AuthContext.Provider value={{ userData, setUserData }}>
             {children}
         </AuthContext.Provider>
-    )
-
+    );
 };
 
 export const useAuth = () => useContext(AuthContext);

@@ -3,18 +3,11 @@ import { useAuth } from '@/context/Auth.Context';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import Cookies from "js-cookie";
+import { LogoutButton } from './LogoutButton';
 
 export const NavBar = () => {
   const {userData, setUserData} = useAuth();
-
-  const router = useRouter();
-
-  const handleLogout = () => {
-    setUserData(null);
-    localStorage.removeItem("userSession");    
-    router.push("/");
-    alert("You have been logged out successfully");
-}
 
   return (
     <div className="bg-white shadow-sm flex items-center p-4">
@@ -36,16 +29,34 @@ export const NavBar = () => {
             <>
             <Link href="/cart" className="text-black hover:text-gray-600">
                 Cart
-              </Link>
+            </Link>
+
+            <Link href="/productByCategory/2" className="text-black hover:text-gray-600">
+                MacBook
+            </Link>
+
+            <Link href="/productByCategory/3" className="text-black hover:text-gray-600">
+                iPad
+            </Link>
+
+            <Link href="/productByCategory/4" className="text-black hover:text-gray-600">
+                Apple Watch
+            </Link>
+
+            <Link href="/productByCategory/5" className="text-black hover:text-gray-600">
+                Airpods
+            </Link>
+
+            <Link href="/productByCategory/6" className="text-black hover:text-gray-600">
+                Homepod
+            </Link>
 
               <Link href="/dashboard" className="text-black hover:text-gray-600">
                 <button className="btn-primary">
                   Dashboard
                 </button>
               </Link>
-              <button onClick={handleLogout} className="btn-primary">
-                Logout
-              </button>
+              <LogoutButton/>
 
             </>
           ) : (

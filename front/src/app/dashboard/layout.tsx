@@ -6,13 +6,16 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-   <section>
-    <header>
-        <Link href="/dashboard">Dashboard</Link>
-        <Link href="/dashboard/orders">Orders</Link>
-        
+   <section className="p-6">
+    <header className="flex space-x-4 mb-6">
+        <Link href="/dashboard">
+          <button className="btn-primary px-4 py-2 rounded-lg">Dashboard</button>
+        </Link>
+        <Link href="/dashboard/orders">
+          <button className="btn-primary px-4 py-2 rounded-lg">Orders</button>
+        </Link>
     </header>
     <main>{children}</main>
    </section>
-  );
+  );
 }

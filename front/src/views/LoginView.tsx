@@ -6,6 +6,7 @@ import { validateLoginForm } from "@/helpers/validate";
 import { login } from "@/helpers/auth.helper";
 import { useAuth } from "@/context/Auth.Context";
 import { useRouter } from "next/navigation";
+import  Cookies  from "js-cookie";
 
 export const LoginView = () => {
     const {userData, setUserData} = useAuth();
@@ -39,7 +40,7 @@ export const LoginView = () => {
                         try {
                             const data = await login(values);
                             setUserData({token: data.token, user: data.user});
-                            
+                            Cookies.set("userData", JSON.stringify({token: data.token, user: data.user}));
                             alert("Inicio de sesión exitoso");
                             router.push("/");
                             

@@ -17,13 +17,16 @@ const ProductDetailView: React.FC<IProducts> = ({
     if (!userData?.token) {
       alert("You must be logged in to add to cart");
     } else {
-      if(!localStorage.getItem("cart")){
-      localStorage.setItem("cart", JSON.stringify(
-        [...JSON.parse(localStorage.getItem("cart") || "[]"),
-          { id, name, price, image, stock }]));
-          alert("Product added to cart");
-      }else{
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      const productExist = cart.some((item) => item.id === id);
+      if(productExist){
         alert("Product already added to cart");
+      }else{
+        localStorage.setItem("cart", JSON.stringify(
+          [...cart,
+            { id, name, price, image, stock }]));
+            alert("Product added to cart");
+            
       }
     }
   };
